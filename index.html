@@ -154,6 +154,33 @@
         var statusText = document.getElementById('status' + id);
         
         if (checkbox.checked) {
+
+            async function turnOnRelay() {
+    // Замените на ваши реальные данные из личного кабинета Ke-Облака
+    const apiKey = 'x1EJBDBuiQn4DrUNVNF1TP9gXhLAgoCU';
+    const mac = '00:04:A3:2F:D0:FB'; // Например: '00:1E:C0:X...X'
+    
+    // Ke-команда для включения реле (например, $KE,REL,1,1 — включить реле №1)
+    const cmd = '$KE,REL,1,1'; 
+    
+    // Формируем URL согласно официальной документации Ke-Облака
+    const url = `kecloud.ru{apiKey}&mac=${mac}&cmd=${encodeURIComponent(cmd)}`;
+
+    try {
+        const response = await fetch(url);
+        
+        if (!response.ok) {
+            throw new Error(`Ошибка сети: ${response.status}`);
+        }
+
+        const data = await response.text(); // Ответ от API обычно приходит в текстовом формате
+        console.log('Ответ от Ke-Облака:', data);
+        return data;
+        
+    } catch (error) {
+        console.error('Не удалось отправить команду:', error);
+    }
+}
             statusText.innerText = "Включено";
             statusText.style.color = "var(--accent-color)";
             console.log('Relay ' + id + ' ON');
